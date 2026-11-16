@@ -1,0 +1,81 @@
+import React from 'react';
+import { StyleSheet, Text, View } from 'react-native';
+import { Card } from '../components/Card';
+import { Screen } from '../components/Screen';
+import { StackedBar } from '../components/StackedBar';
+import { StatusTag } from '../components/StatusTag';
+import { audienceAges, audienceTopics } from '../data/content';
+import { colors, text } from '../theme';
+
+/** VeriMind · Público del creador */
+export default function AudienceScreen() {
+  return (
+    <Screen title="PÚBLICO DEL CREADOR" contentStyle={styles.content}>
+      <Text style={styles.title}>¿Qué público atrae?</Text>
+      <Text style={styles.subtitle}>Estimado por el lenguaje de sus comentarios. Solo cifras agregadas.</Text>
+
+      <Card style={styles.card}>
+        <Text style={styles.cardTitle}>Edad estimada de quienes comentan</Text>
+        <StackedBar segments={audienceAges} height={10} radiusSize={5} />
+        <View style={styles.legend}>
+          {audienceAges.map((a) => (
+            <View key={a.label} style={styles.legendItem}>
+              <View style={[styles.dot, { backgroundColor: a.color }]} />
+              <Text style={styles.legendText}>
+                {a.label} {a.value} %
+              </Text>
+            </View>
+          ))}
+        </View>
+        <Text style={styles.total}>Total: 100 %</Text>
+      </Card>
+
+      <Card tone="success" style={styles.card}>
+        <View style={styles.figureRow}>
+          <Text style={styles.figure}>22 %</Text>
+          <StatusTag tone="success" label="Interés alto" />
+        </View>
+        <Text style={styles.body}>de los comentarios preguntan por el precio o dónde comprar.</Text>
+      </Card>
+
+      <Card style={styles.card}>
+        <Text style={styles.cardTitle}>Temas que más se repiten</Text>
+        <View style={styles.topics}>
+          {audienceTopics.map((topic) => (
+            <StatusTag key={topic} tone="info" label={topic} />
+          ))}
+        </View>
+      </Card>
+
+      <Card tone="warning" style={styles.card}>
+        <Text style={[styles.cardTitle, { color: colors.warningText }]}>Para qué te sirve</Text>
+        <Text style={[styles.body, { color: colors.warningBody }]}>
+          Ideal para marcas de ropa, accesorios y videojuegos. Evita alcohol y apuestas: la mitad del público estimado es
+          menor de edad.
+        </Text>
+      </Card>
+
+      <Text style={styles.caption}>
+        Es una estimación por palabras y emojis, no la edad real. No se guardan datos de las personas que comentan.
+      </Text>
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  content: { paddingTop: 8, gap: 14 },
+  title: { ...text.title24, color: colors.text },
+  subtitle: { ...text.body12, color: colors.textMuted },
+  card: { gap: 8 },
+  cardTitle: { ...text.heading13, color: colors.text },
+  legend: { flexDirection: 'row', flexWrap: 'wrap', columnGap: 10, rowGap: 4 },
+  legendItem: { flexDirection: 'row', alignItems: 'center', gap: 5 },
+  dot: { width: 8, height: 8, borderRadius: 4 },
+  legendText: { ...text.body11, lineHeight: 13, color: colors.textSoft },
+  total: { ...text.chip, color: colors.successText },
+  figureRow: { flexDirection: 'row', alignItems: 'center', gap: 10 },
+  figure: { ...text.title24, lineHeight: 29, color: colors.successText },
+  body: { ...text.body12, color: colors.textSoft },
+  topics: { flexDirection: 'row', flexWrap: 'wrap', gap: 8 },
+  caption: { ...text.caption10, color: colors.textMuted },
+});
