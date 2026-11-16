@@ -26,7 +26,7 @@ const initialMessages: Message[] = [
 export default function ChatScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { notify } = useApp();
+  const { notify, userName, handle } = useApp();
   const [messages, setMessages] = useState<Message[]>(initialMessages);
   const [draft, setDraft] = useState('');
   const scroller = useRef<React.ComponentRef<typeof ScrollView>>(null);
@@ -49,7 +49,7 @@ export default function ChatScreen() {
         <View style={styles.summary}>
           <ProfilePhoto />
           <View style={styles.identity}>
-            <Text style={styles.nickname}>{account.handle}</Text>
+            <Text style={styles.nickname}>{handle}</Text>
             <Text style={styles.metrics}>{account.followers} seguidores  ·  {account.posts} publicaciones</Text>
             <View style={styles.risk}>
               <View style={styles.riskBar} />
@@ -77,7 +77,7 @@ export default function ChatScreen() {
           {messages.map((m) =>
             m.from === 'user' ? (
               <View key={m.id} style={[styles.bubble, styles.userBubble]}>
-                <Text style={[styles.sender, { color: colors.infoText }]}>{chatSeed.userName}</Text>
+                <Text style={[styles.sender, { color: colors.infoText }]}>{userName}</Text>
                 <Text style={styles.body}>{m.body}</Text>
               </View>
             ) : (

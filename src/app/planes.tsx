@@ -50,9 +50,11 @@ export default function PlansScreen() {
                 borderWidth={active ? 1.5 : 1}
                 style={styles.plan}
               >
-                <View style={styles.planHeader}>
-                  <Text style={styles.planName}>{plan.name}</Text>
-                  {plan.badge ? <StatusTag tone={plan.badge.tone} label={plan.badge.label} /> : null}
+                 <View style={styles.planHeader}>
+                  <View style={styles.planTitle}>
+                    <Text style={styles.planName}>{plan.name}</Text>
+                    {plan.badge ? <StatusTag tone={plan.badge.tone} label={plan.badge.label} /> : null}
+                  </View>
                   <Text style={styles.price}>{plan.priceLabel}</Text>
                 </View>
                 <Text style={styles.accounts}>{plan.accounts}</Text>
@@ -78,9 +80,10 @@ const styles = StyleSheet.create({
   subtitle: { ...text.body12, color: colors.textMuted },
   list: { gap: 10, marginBottom: 10 },
   plan: { gap: 4, paddingVertical: 10 },
-  planHeader: { flexDirection: 'row', alignItems: 'center', gap: 8, minHeight: 25 },
+  planHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 8, minHeight: 25 },
+  planTitle: { flexDirection: 'row', alignItems: 'center', flexWrap: 'wrap', flexShrink: 1, gap: 8, rowGap: 4 },
+  price: { ...text.strong14, flexShrink: 0, color: colors.successText },
   planName: { ...text.strong14, color: colors.text },
-  price: { ...text.strong14, marginLeft: 'auto', color: colors.successText },
   accounts: { ...text.chip, color: colors.infoText },
   description: { ...text.body11, color: colors.textSoft },
   caption: { ...text.caption10, color: colors.textMuted },

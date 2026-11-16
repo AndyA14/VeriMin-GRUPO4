@@ -12,9 +12,14 @@ interface AppState {
   setPlan: (plan: CurrentPlan) => void;
   /** Muestra un aviso de confirmación en la parte superior. */
   notify: (message: string) => void;
+  userName: string;
+  setUserName: (name: string) => void;
+  handle: string;
+  setHandle: (handle: string) => void;
 }
 
 const AppContext = createContext<AppState | null>(null);
+
 
 export function useApp(): AppState {
   const ctx = useContext(AppContext);
@@ -24,6 +29,8 @@ export function useApp(): AppState {
 
 export function AppProvider({ children }: { children: React.ReactNode }) {
   const [plan, setPlan] = useState<CurrentPlan>('trial');
+  const [userName, setUserName] = useState('Carlos');
+  const [handle, setHandle] = useState('@carlospati');
   const [message, setMessage] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
   const opacity = useRef(new Animated.Value(0)).current;
@@ -43,7 +50,10 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
-  const value = useMemo(() => ({ plan, setPlan, notify }), [plan, notify]);
+  const value = useMemo(
+  () => ({ plan, setPlan, notify, userName, setUserName, handle, setHandle }),
+  [plan, notify, userName, handle],
+  );
   const tone = tones.success;
 
   return (

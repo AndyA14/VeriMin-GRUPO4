@@ -6,17 +6,29 @@ import { Button } from '../components/Button';
 import { Field } from '../components/Field';
 import { Logo } from '../components/Logo';
 import { Screen } from '../components/Screen';
+import { useApp } from '../state/AppState';
+import { nombreDesdeCorreo } from '../utils/formato';
 import { colors, fonts, radius, text } from '../theme';
 
 /** VeriMind · Login corporativo */
 export default function LoginScreen() {
   const router = useRouter();
+  const { setUserName } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  
 
   const footer = (
     <View style={styles.footer}>
-      <Button label="Iniciar Sesión" semiBold onPress={() => router.replace('/buscar')} style={styles.stretch} />
+       <Button
+        label="Iniciar Sesión"
+        semiBold
+        onPress={() => {
+          setUserName(nombreDesdeCorreo(email));
+          router.replace('/buscar');
+        }}
+        style={styles.stretch}
+      />
       <View style={styles.security}>
         <ShieldCheck size={12} color={colors.textMuted} strokeWidth={1.4} absoluteStrokeWidth />
         <Text style={styles.securityText}>Entorno corporativo protegido</Text>

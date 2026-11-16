@@ -9,16 +9,20 @@ import { StatusTag } from '../components/StatusTag';
 import { analysisItems, plans } from '../data/content';
 import { useApp } from '../state/AppState';
 import { colors, radius, text } from '../theme';
+import { normalizarUsuario } from '../utils/formato';
 
 /** VeriMind · Búsqueda y extracción */
 export default function SearchScreen() {
   const router = useRouter();
-  const { plan } = useApp();
+  const { plan, userName, setHandle: guardarUsuario } = useApp();
   const [handle, setHandle] = useState('');
 
   const planName = plans.find((p) => p.id === plan)?.name;
 
-  const analyze = () => router.push('/procesando');
+    const analyze = () => {
+    guardarUsuario(normalizarUsuario(handle));
+    router.push('/procesando');
+  };
 
   return (
     <Screen
@@ -34,7 +38,7 @@ export default function SearchScreen() {
         )}
       </View>
 
-      <Text style={[styles.greeting, { marginTop: 49 }]}>¡Hola Carlos!</Text>
+      <Text style={[styles.greeting, { marginTop: 49 }]}>¡Hola {userName}!</Text>
       <Text style={[styles.lead, { marginTop: 49 }]}>Bienvenido al centro de auditoría</Text>
 
       <View style={[styles.searchRow, { marginTop: 113 }]}>

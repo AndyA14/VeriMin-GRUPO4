@@ -10,6 +10,7 @@ import { Screen } from '../components/Screen';
 import { StatusTag } from '../components/StatusTag';
 import { account } from '../data/content';
 import { colors, layout, text } from '../theme';
+import { useApp } from '../state/AppState';
 
 function Metric({ value, label }: { value: string; label: string }) {
   return (
@@ -23,6 +24,7 @@ function Metric({ value, label }: { value: string; label: string }) {
 /** VeriMind · Resultado del análisis */
 export default function ResultScreen() {
   const router = useRouter();
+  const { handle } = useApp();
   const insets = useSafeAreaInsets();
 
   const overlay = (
@@ -49,7 +51,7 @@ export default function ResultScreen() {
         <ProfilePhoto />
         <View style={styles.identity}>
           <View style={styles.nickBlock}>
-            <Text style={styles.nickname}>{account.handle}</Text>
+            <Text style={styles.nickname}>{handle}</Text>
             <StatusTag tone="danger" label={account.riskLabel} />
           </View>
           <View style={styles.metrics}>
