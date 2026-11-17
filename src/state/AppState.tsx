@@ -51,8 +51,8 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
 
   const value = useMemo(
-  () => ({ plan, setPlan, notify, userName, setUserName, handle, setHandle }),
-  [plan, notify, userName, handle],
+    () => ({ plan, setPlan, notify, userName, setUserName, handle, setHandle }),
+    [plan, setPlan, notify, userName, setUserName, handle, setHandle],
   );
   const tone = tones.success;
 
