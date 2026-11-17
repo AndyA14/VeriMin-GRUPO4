@@ -7,7 +7,7 @@ import { Field } from '../components/Field';
 import { Logo } from '../components/Logo';
 import { Screen } from '../components/Screen';
 import { useApp } from '../state/AppState';
-import { nombreDesdeCorreo } from '../utils/formato';
+import { correoValido, nombreDesdeCorreo } from '../utils/formato';
 import { colors, fonts, radius, text } from '../theme';
 
 /** VeriMind · Login corporativo */
@@ -16,19 +16,19 @@ export default function LoginScreen() {
   const { setUserName } = useApp();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  
+  const [error, setError] = useState<string | null>(null);
+
+  const iniciarSesion = () => {
+    if (!correoValido(email)) return setError('Ingresa un correo corporativo válido.');
+    if (password.length < 6) return setError('La contraseña debe tener al menos 6 caracteres.');
+    setError(null);
+    setUserName(nombreDesdeCorreo(email));
+    router.replace('/buscar');
+  };
 
   const footer = (
     <View style={styles.footer}>
-       <Button
-        label="Iniciar Sesión"
-        semiBold
-        onPress={() => {
-          setUserName(nombreDesdeCorreo(email));
-          router.replace('/buscar');
-        }}
-        style={styles.stretch}
-      />
+      <Button label="Iniciar Sesión" semiBold onPress={iniciarSesion} style={styles.stretch} />
       <View style={styles.security}>
         <ShieldCheck size={12} color={colors.textMuted} strokeWidth={1.4} absoluteStrokeWidth />
         <Text style={styles.securityText}>Entorno corporativo protegido</Text>
@@ -75,6 +75,7 @@ export default function LoginScreen() {
             autoComplete="password"
             textContentType="password"
           />
+          {error ? <Text style={styles.error}>{error}</Text> : null}
         </View>
       </Screen>
     </KeyboardAvoidingView>
@@ -97,6 +98,7 @@ const styles = StyleSheet.create({
   title: { ...text.display30, color: colors.text },
   subtitle: { ...text.body13, color: colors.textMuted },
   fields: { gap: 12 },
+  error: { ...text.caption10, color: colors.dangerText },
   footer: { alignItems: 'center', gap: 16 },
   stretch: { alignSelf: 'stretch' },
   security: { flexDirection: 'row', alignItems: 'center', gap: 6 },

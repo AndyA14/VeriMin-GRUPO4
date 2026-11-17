@@ -11,3 +11,8 @@ export function normalizarUsuario(texto: string): string {
   const limpio = texto.trim().replace(/^@+/, '').replace(/\s+/g, '');
   return limpio ? `@${limpio}` : '@carlospati';
 }
+
+
+export function correoValido(correo: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(correo.trim());
+}
