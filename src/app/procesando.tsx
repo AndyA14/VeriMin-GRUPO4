@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Image, StyleSheet, Text, View } from 'react-native';
 import { Stack, useRouter } from 'expo-router';
 import { Logo } from '../components/Logo';
@@ -19,7 +19,7 @@ const thumbs = [
 export default function ProcessingScreen() {
   const router = useRouter();
   const [stage, setStage] = useState(0);
-  const progress = useRef(new Animated.Value(processingStages[0].progress)).current;
+  const [progress] = useState(() => new Animated.Value(processingStages[0].progress));
 
   useEffect(() => {
     Animated.timing(progress, {

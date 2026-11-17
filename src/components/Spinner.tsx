@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Easing, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Stop } from 'react-native-svg';
 import { colors } from '../theme';
@@ -13,7 +13,7 @@ const ARC = CIRCUMFERENCE * (315 / 360);
 
 /** Spinner circular de procesamiento: pista, arco de luz giratorio y símbolo central. */
 export function Spinner() {
-  const spin = useRef(new Animated.Value(0)).current;
+  const [spin] = useState(() => new Animated.Value(0));
 
   useEffect(() => {
     const loop = Animated.loop(
