@@ -33,7 +33,7 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
   const [handle, setHandle] = useState('@carlospati');
   const [message, setMessage] = useState<string | null>(null);
   const insets = useSafeAreaInsets();
-  const opacity = useRef(new Animated.Value(0)).current;
+  const [opacity] = useState(() => new Animated.Value(0));
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const notify = useCallback(

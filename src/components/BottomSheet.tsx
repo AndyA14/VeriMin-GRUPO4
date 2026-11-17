@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Animated, Dimensions, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, layout } from '../theme';
@@ -13,11 +13,13 @@ interface Props {
 export function BottomSheet({ visible, onClose, children }: Props) {
   const insets = useSafeAreaInsets();
   const [mounted, setMounted] = useState(visible);
-  const progress = useRef(new Animated.Value(0)).current;
+  const [progress] = useState(() => new Animated.Value(0));
+
+  // Si el panel se abre, se monta de inmediato (sin esperar al efecto).
+  if (visible && !mounted) setMounted(true);
 
   useEffect(() => {
     if (visible) {
-      setMounted(true);
       Animated.timing(progress, { toValue: 1, duration: 240, useNativeDriver: true }).start();
     } else {
       Animated.timing(progress, { toValue: 0, duration: 200, useNativeDriver: true }).start(({ finished }) => {
@@ -25,7 +27,6 @@ export function BottomSheet({ visible, onClose, children }: Props) {
       });
     }
   }, [visible, progress]);
-
   const translateY = progress.interpolate({ inputRange: [0, 1], outputRange: [Dimensions.get('window').height, 0] });
 
   return (

@@ -11,13 +11,16 @@ interface Props {
 
 /** Fila con ícono, título y descripción (Qué analizaremos, Recursos de apoyo). */
 export function IconRow({ icon, title, description }: Props) {
-  const Icon = iconFor(icon);
-  const small = icon === 'shield' || icon === 'send';
+  const icono = React.createElement(iconFor(icon), {
+    size: icon === 'shield' || icon === 'send' ? 14 : 17,
+    color: colors.infoIcon,
+    strokeWidth: 1.5,
+    absoluteStrokeWidth: true,
+  });
+
   return (
     <View style={styles.row} accessible accessibilityLabel={`${title}. ${description}`}>
-      <View style={styles.tile}>
-        <Icon size={small ? 14 : 17} color={colors.infoIcon} strokeWidth={1.5} absoluteStrokeWidth />
-      </View>
+      <View style={styles.tile}>{icono}</View>
       <View style={styles.texts}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.description}>{description}</Text>
