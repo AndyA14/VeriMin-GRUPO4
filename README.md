@@ -16,122 +16,171 @@ Solo la app: no incluye las láminas de negocio ni las páginas del sistema de d
 
 ---
 
+## Estado del Proyecto y Arquitectura
+
+La aplicación es un prototipo interactivo funcional desarrollado con **Expo Router** y **React Native**. Integra un flujo completo de auditoría para cuentas de redes sociales (TikTok), desde el login corporativo con validación y extracción de credenciales, pasando por la búsqueda, simulación de análisis de señales y algoritmos de autenticidad (Ley de Benford, Big Five, análisis de comentarios), hasta informes ejecutivos, panel de apoyo al creador, chat con asistente y pasarela de suscripción a planes.
+
+### Características Principales Implementadas
+
+- **Autenticación con Validación:** Validación reactiva de correo corporativo mediante expresión regular (`correoValido`) y contraseña mínima de 6 caracteres; derivación automática del nombre de usuario (`nombreDesdeCorreo`) para personalizar la experiencia.
+- **Flujo Dinámico de Usuario:** El handle ingresado en la búsqueda (`@usuario`) se normaliza y propaga globalmente a través del estado (`AppState`), reflejándose en las pantallas de Resultado y Chat.
+- **Procesamiento Animado:** Pantalla de análisis por etapas con barra de progreso animada continua (`Animated`), spinner personalizado e inspección visual simulada de publicaciones.
+- **Asistente Interactivo:** Chat con soporte para envío de mensajes en tiempo real, scroll automático, autoría asignada al usuario logueado y respuestas automáticas asistidas.
+- **Informes y Métricas:** Visualización de proporciones Big Five y rangos de edad mediante gráficos de barras apiladas (`StackedBar`), métricas de riesgo y anomalías de Benford.
+- **Módulo de Apoyo al Creador:** Selector reactivo de casos de riesgo (acoso, tensión) y panel deslizable (`BottomSheet`) con recursos y canales de ayuda.
+- **Planes y Suscripción:** Selección de planes (Free, Starter, Professional, Enterprise), pasarela simulada con métodos de pago (tarjeta/transferencia) y sistema de notificaciones flotantes (*Toast*).
+- **Control de Calidad:** Configuración estricta de TypeScript (`tsc --noEmit`) y ESLint con configuración plana para Expo (`eslint-config-expo`).
+
+---
+
 ## Stack y versiones instaladas
 
 - **Expo SDK:** `~58.0.25`
 - **Expo Router:** `~58.0.31`
 - **React / React Native:** `19.3.0` / `0.88.1`
 - **TypeScript:** `~6.0.3`
+- **Linter:** `eslint` (`^9.0.0`) + `eslint-config-expo` (`~58.0.4`)
 - **UI e Iconografía:** `lucide-react-native`, `react-native-svg`, `@expo-google-fonts/inter`
+- **Áreas Seguras y Navegación:** `react-native-safe-area-context`, `react-native-screens`
 
 ---
 
 ## 1. Instalación en un entorno nuevo
 
-El proyecto ya cuenta con su estructura base y `package.json` configurados en la raíz. Si clonas el repositorio desde cero, instala las dependencias con:
+El proyecto cuenta con su estructura base y dependencias declaradas en `package.json`. Para instalar las dependencias en una instalación limpia o nuevo clon:
 
 ```bash
 npm install
 ```
 
-*(Nota: si ocurre algún conflicto de peer dependencies entre versiones de `react` y `react-dom`, ejecuta `npm install --legacy-peer-deps` o `npx expo install --fix`).*
+*(Nota: si ocurre algún conflicto de peer dependencies entre versiones de paquetes de React, ejecuta `npm install --legacy-peer-deps` o `npx expo install --fix`).*
 
 ---
 
-## 2. Configuración de Expo Router (ya aplicada)
+## 2. Configuración de Expo Router
 
-- En `package.json`: `"main": "expo-router/entry"` (asegurarse de no dejar `"index.ts"` duplicado).
-- En `app.json`, dentro de `"expo"`: `"scheme": "verimind"`, `"userInterfaceStyle": "dark"` y `"plugins": ["expo-router"]`.
-- Los archivos base `App.tsx` e `index.ts` del template inicial fueron eliminados para usar el enrutamiento basado en archivos dentro de `src/app/`.
-
----
-
-## 3. Reemplazar las imágenes provisionales
-
-Las imágenes de `assets/images/` son degradados provisionales. Expórtalas desde Figma (PNG @3x) con estos nombres:
-
-| Archivo               | Capa en Figma                                                             |
-|-----------------------|---------------------------------------------------------------------------|
-| `profile.png`         | `Foto de perfil` (70:148) — 88×123                                         |
-| `login-hero.png`      | Imagen de `Fotografía editorial` (22:803) — sin la capa de texto           |
-| `post-1/2/3.png`      | `Fotografía ilustrativa en carga` (22:870, 22:873, 22:876) — sin desenfoque |
-
-El desenfoque (1,5) y la opacidad (70 %) de las miniaturas ya los aplica el código.
+- En `package.json`: `"main": "expo-router/entry"`.
+- En `app.json`, dentro de `"expo"`:
+  - `"scheme": "verimind"`
+  - `"userInterfaceStyle": "dark"`
+  - `"plugins": ["expo-router"]`
+- Enrutamiento basado en archivos ubicado bajo el directorio `src/app/` con soporte para transiciones y layout raíz (`src/app/_layout.tsx`).
 
 ---
 
-## 4. Ejecutar la aplicación
+## 3. Scripts de Desarrollo y Calidad
 
-Usa siempre `npx expo` (el CLI global `expo` está deprecado):
+Disponibles en `package.json`:
 
 ```bash
-npx expo start
+# Iniciar el servidor de desarrollo de Expo
+npm run start       # o npx expo start
+
+# Ejecución en plataformas específicas
+npm run android     # Inicia en Android / emulador
+npm run ios         # Inicia en simulador de iOS (requiere macOS)
+npm run web         # Inicia versión web
+
+# Verificación de tipos y linting
+npm run typecheck   # Ejecuta validación estricta de TypeScript (tsc --noEmit)
+npm run lint        # Valida estilo de código con ESLint
 ```
 
-Comandos adicionales disponibles en `package.json`:
-- `npm run android` — Inicia el servidor y abre en Android / emulador.
-- `npm run ios` — Inicia el servidor y abre en iOS (macOS).
-- `npm run web` — Inicia la versión web.
+---
+
+## 4. Recursos Gráficos (`assets/images/`)
+
+Las imágenes del proyecto se encuentran organizadas en `assets/images/`:
+
+| Archivo            | Uso en la aplicación                                                     |
+|--------------------|--------------------------------------------------------------------------|
+| `login-hero.png`   | Imagen de cabecera editorial en la pantalla de inicio de sesión          |
+| `profile.png`      | Fotografía del perfil del creador analizado                              |
+| `post-1/2/3.png`   | Miniaturas ilustrativas de publicaciones en la pantalla de procesamiento |
+
+El desenfoque (`blurRadius={1.5}`) y la opacidad (`70 %`) de las miniaturas en la carga son aplicados directamente por el código.
 
 ---
 
-## 5. Notas del entorno de desarrollo (Windows / Git)
+## 5. Mapa pantalla → archivo
 
-- **Identidad de Git:** Antes de realizar commits en una máquina nueva, configurar nombre y correo (`git config --global user.name "..."` y `git config --global user.email "..."`).
-- **Terminal Git Bash (`MINGW64`):** Para pegar comandos en la terminal de VS Code, usar **clic derecho** o `Shift + Insert` (evitar `Ctrl + V`, ya que inserta `^V`).
-- **Finales de línea (LF/CRLF):** Git en Windows convertirá automáticamente LF a CRLF al tocar los archivos de `src/`.
+| Frame de Figma                                  | Ruta / archivo                      | Descripción y Estado |
+|-------------------------------------------------|-------------------------------------|----------------------|
+| Login corporativo                               | `src/app/index.tsx`                 | Formulario con validación de correo corporativo y contraseña (mínimo 6 caracteres), extrae el nombre del usuario |
+| Búsqueda y extracción                           | `src/app/buscar.tsx`                | Saludo personalizado (`¡Hola {userName}!`), tag de estado del plan y buscador de `@usuario` de TikTok |
+| Procesamiento 1/3, 2/3, 3/3                     | `src/app/procesando.tsx`            | Pantalla continua animada (progreso y spinner) con avance automático en 3 etapas |
+| Resultado del análisis                          | `src/app/resultado.tsx`             | Resumen dinámico del handle, métricas de riesgo y accesos a submódulos |
+| Asistente                                       | `src/app/chat.tsx`                  | Chat interactivo, burbujas con nombre de usuario, autoscroll y confirmación de reporte PDF |
+| Informe para la empresa (IA)                    | `src/app/informe.tsx`               | Resumen ejecutivo, gráfica Big Five (`StackedBar`), test de Benford y descarga PDF |
+| Apoyo al creador (acoso / tono / malestar)      | `src/app/apoyo.tsx`                 | Selector de casos con chips y recomendaciones adaptadas |
+| Recursos de apoyo (panel)                       | `BottomSheet` dentro de `apoyo.tsx` | Hoja modal inferior con líneas de ayuda y recomendaciones |
+| Público del creador                             | `src/app/publico.tsx`               | Distribución por edades (`StackedBar`), tags de interés y potencial comercial |
+| Planes                                          | `src/app/planes.tsx`                | Selector de planes con confirmación inmediata del plan gratuito o pase a pasarela |
+| Pago                                            | `src/app/pago.tsx`                  | Resumen del plan, selector de método (tarjeta/transferencia) y activación en estado |
+| Avisos y notificaciones (Toast)                | `src/state/AppState.tsx`            | Banner animado superior con `BadgeCheck` para confirmar acciones clave |
 
----
-
-## Mapa pantalla → archivo
-
-| Frame de Figma                                  | Ruta / archivo                      |
-|-------------------------------------------------|-------------------------------------|
-| Login corporativo                               | `src/app/index.tsx`                 |
-| Búsqueda y extracción                           | `src/app/buscar.tsx`                |
-| Procesamiento 1/3, 2/3, 3/3                     | `src/app/procesando.tsx`            |
-| Resultado del análisis                          | `src/app/resultado.tsx`             |
-| Asistente                                       | `src/app/chat.tsx`                  |
-| Informe para la empresa (IA)                    | `src/app/informe.tsx`               |
-| Apoyo al creador (acoso / tono / malestar)      | `src/app/apoyo.tsx`                 |
-| Recursos de apoyo (panel)                       | `BottomSheet` dentro de `apoyo.tsx` |
-| Público del creador                             | `src/app/publico.tsx`               |
-| Planes                                          | `src/app/planes.tsx`                |
-| Pago                                            | `src/app/pago.tsx`                  |
-| Reporte generado / Plan activado (avisos)       | `src/state/AppState.tsx`            |
-
-**Flujo:** Login → Búsqueda → Procesamiento → Resultado → (Chat · Informe · Público · Apoyo). Búsqueda → Planes → Pago.
-El flujo se dedujo de los nombres de los frames (los enlaces de prototipo de Figma no se pudieron leer).
+**Flujo de navegación:**
+`Login` → `Búsqueda` → `Procesamiento` → `Resultado` → (`Chat` · `Informe` · `Público` · `Apoyo`).
+Desde `Búsqueda`: → `Planes` → `Pago` → Retorno a `Búsqueda` con plan actualizado.
 
 ---
 
-## Estructura del proyecto
+## 6. Estructura del proyecto
 
 ```text
 assets/
-  images/               Recursos gráficos (login-hero, post-1/2/3, profile) e íconos de app
+  images/               Recursos gráficos (login-hero, post-1/2/3, profile) e íconos
 src/
-  theme/index.ts        Colores, tipografía (Inter), radios y tonos (info/peligro/advertencia/éxito)
-  data/content.ts       Textos y datos de ejemplo de todas las pantallas
-  state/AppState.tsx    Plan actual y avisos de confirmación
-  components/           Átomos, moléculas y organismos (Button, Field, StatusTag, Card, IconRow,
-                        ActionCard, AlertCard, StackedBar, Spinner, BottomSheet, NavBar, Screen…)
-  app/                  Pantallas (Expo Router)
-package.json            Dependencias y scripts del proyecto
-app.json                Configuración de Expo
-tsconfig.json           Configuración de TypeScript
+  app/                  Rutas y pantallas navegables (Expo Router)
+    _layout.tsx         Layout raíz con fuentes Inter, Theme Provider y StatusBar
+    index.tsx           Login corporativo con validación
+    buscar.tsx          Buscador de cuenta y centro de auditoría
+    procesando.tsx      Pantalla de carga secuencial con barra animada
+    resultado.tsx       Vista general de resultados y métricas
+    chat.tsx            Asistente conversacional interactivo
+    informe.tsx         Informe para empresas con gráficos Big Five
+    apoyo.tsx           Guía de apoyo al creador y casos de acoso
+    publico.tsx         Análisis demográfico y de audiencia
+    planes.tsx          Catálogo de planes y suscripciones
+    pago.tsx            Pasarela y confirmación de pago
+  components/           Componentes modulares reutilizables
+    ActionCard.tsx      Tarjeta interactiva de navegación
+    AlertCard.tsx       Tarjeta de advertencia y anomalías detectadas
+    BottomSheet.tsx     Panel modal deslizable inferior
+    BrandMark.tsx       Isotipo de marca VeriMind
+    Button.tsx          Botón adaptable (primario, outline, compact)
+    Card.tsx            Contenedor con bordes y tonos personalizables
+    Chip.tsx            Píldora seleccionable para filtros y métodos
+    Field.tsx           Campo de entrada de texto con icono integrado
+    IconRow.tsx         Fila informativa con icono temático
+    Logo.tsx            Identidad corporativa completa
+    NavBar.tsx          Barra de navegación superior con retroceso
+    ProfilePhoto.tsx    Avatar de usuario con marco decorativo
+    Screen.tsx          Layout contenedor base con soporte para scroll y footer fijo
+    Spinner.tsx         Indicador circular de carga estilizado
+    StackedBar.tsx      Gráfica de barras segmentadas apiladas
+    StatusTag.tsx       Etiqueta de estado por tono (info, peligro, advertencia, éxito)
+  data/
+    content.ts          Datos base del prototipo (Big Five, planes, casos de apoyo, etc.)
+  state/
+    AppState.tsx        Contexto global: plan activo, usuario logueado, handle y toast
+  theme/
+    index.ts            Tokens de diseño: paleta de colores, tipografía, espaciados y radios
+  utils/
+    formato.ts          Funciones de validación de correo, extracción de nombres y normalización de handles
+eslint.config.js        Configuración de ESLint (flat config)
+package.json            Dependencias, metadatos y scripts
+tsconfig.json           Configuración del compilador de TypeScript
+app.json                Configuración de la aplicación Expo
 ```
 
 ---
 
-## Decisiones de implementación (revisar)
+## 7. Decisiones de implementación y estado del código
 
-- **Botón flotante del chat:** en Figma está dentro del flujo vertical y queda en el borde izquierdo (x=0); en código va abajo a la derecha, junto a la nota.
-- **Procesamiento:** las tres pantallas son una sola que avanza sola (2,4 s por paso) y pasa a Resultado. La barra de progreso usa 113, 200 y 290 de 309 px.
-- **Spinner:** el degradado angular del arco se aproxima con un degradado lineal.
-- **Color de botones:** se usó `#3B82F6` como en los frames. El sistema de diseño indica `#2563EB` para mejor contraste con texto blanco; se cambia en `colors.button`.
-- **Plan actual:** se añadió un estado mínimo. Al pagar, el chip de la pantalla de búsqueda pasa de «Prueba gratuita» a «Plan … · activo».
-- **Chat:** al enviar se agrega tu mensaje y una respuesta de ejemplo fija. No hay IA conectada.
-- **PDF:** los botones de descarga solo muestran el aviso «Reporte de verificación generado (PDF)»; no generan archivo.
-- **Datos:** todo es de ejemplo (cuenta `@carlospati`); lo escrito en el buscador no cambia el resultado.
-- **Pago:** los campos son de ejemplo y no se guardan ni se envían.
+- **Validación de Formularios:** Se incorporó validación formal en el inicio de sesión (`correoValido`), exigiendo un formato corporativo legítimo y contraseña de al menos 6 caracteres antes de permitir la entrada, con retroalimentación visual de errores mediante mensajes reactivos.
+- **Persistencia en Memoria del Flujo:** El handle de TikTok introducido en el buscador se limpia y normaliza (`normalizarUsuario`), transmitiéndose al estado global (`AppState`) para personalizar la pantalla de resultados y el chat. De igual forma, el correo del login define el nombre del auditor (`nombreDesdeCorreo`) visible en los saludos de bienvenida y en la autoría de los mensajes del chat.
+- **Simulación del Asistente:** El chat permite enviar mensajes en tiempo real, añade las intervenciones a una lista local, efectúa desplazamiento automático y responde de forma asistida (con retraso realista de 600 ms) sin requerir servicios externos de terceros ni claves de API.
+- **Generación de Reportes PDF:** Al pulsar en la descarga de informes o auditorías, se activa una notificación flotante (*Toast*) animada en la parte superior que confirma la generación del archivo sin bloquear la interfaz.
+- **Animaciones e Interacciones:** La etapa de procesamiento emplea animación fluida a través de la API `Animated` de React Native para el llenado de la barra según los pasos estipulados en el diseño.
+- **Pasarela de Pagos:** La pantalla de pagos permite alternar entre tarjeta y transferencia bancaria, reflejando el cambio de estado tanto en el chip de la pantalla de búsqueda como en el contexto global de la aplicación.
