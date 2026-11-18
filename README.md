@@ -1,7 +1,20 @@
 # VeriMind Analytics — Expo (React Native)
 
+**Integrantes del Grupo:** Andrés Aucanela, Carlos Patiño, Joseph Ponce y Petter Rodriguez
+
 Código de las **16 pantallas móviles** del archivo de Figma «Moviles» (`Wyt8RCSYYWKs4xzLd5ptPF`), frames de 393×852.
 Solo la app: no incluye las láminas de negocio ni las páginas del sistema de diseño.
+
+---
+
+## IA utilizadas por los integrantes del Grupo
+
+- **Andy:** Claude Sonet 5.5 y Gemini Flash 3.8
+- **Carlos:** Claude Sonet 5.5
+- **Joseph:** Claude Opus 5.5
+- **Petter:** Gemini Argon
+
+---
 
 ## Stack y versiones instaladas
 
