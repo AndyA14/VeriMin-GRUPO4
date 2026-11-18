@@ -16,6 +16,15 @@ Solo la app: no incluye las láminas de negocio ni las páginas del sistema de d
 
 ---
 
+## Diseño en Figma
+
+Enlace al archivo y prototipo de Figma utilizado para el diseño y construcción de las 16 pantallas de la aplicación:
+
+- **Diseño en Figma:** [Moviles — VeriMind](https://www.figma.com/design/Wyt8RCSYYWKs4xzLd5ptPF/Moviles?node-id=0-1&t=jTQnLaIv0eh2W7GM-1)
+- **Enlace directo:** `https://www.figma.com/design/Wyt8RCSYYWKs4xzLd5ptPF/Moviles?node-id=0-1&t=jTQnLaIv0eh2W7GM-1`
+
+---
+
 ## Estado del Proyecto y Arquitectura
 
 La aplicación es un prototipo interactivo funcional desarrollado con **Expo Router** y **React Native**. Integra un flujo completo de auditoría para cuentas de redes sociales (TikTok), desde el login corporativo con validación y extracción de credenciales, pasando por la búsqueda, simulación de análisis de señales y algoritmos de autenticidad (Ley de Benford, Big Five, análisis de comentarios), hasta informes ejecutivos, panel de apoyo al creador, chat con asistente y pasarela de suscripción a planes.
